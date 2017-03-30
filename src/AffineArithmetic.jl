@@ -3,7 +3,7 @@ module AffineArithmetic
 using ValidatedNumerics
 
 import Base: +, -, *, /, ==,
-            zero, diam, range,
+            zero, range,
             show
 
 
@@ -103,6 +103,14 @@ end
 
 *(α::Real, C::Affine) = Affine(α*C.c, α*C.γ)
 
-zero(C::Affine) = Affine(0.0)
+eltype{T}(C::Affine{T}) = T
+zero{T}(C::Affine{T}) = Affine(zero(T))
+zero{T}(::Type{Affine{T}}) = Affine(zero(T))
+
+one{T}(C::Affine{T}) = Affine(one(T))
+one{T}(::Type{Affine{T}}) = Affine(one(T))
+
+
+#one(C::Affine)
 
 end
