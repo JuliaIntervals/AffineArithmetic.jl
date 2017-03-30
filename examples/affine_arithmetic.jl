@@ -1,8 +1,3 @@
-# Affine arithmetic following
-# "Implementation and improvements of affine arithmetic"
-# by Siegfried M. Rump and Masahide Kashiwagi
-
-push!(LOAD_PATH, ".")
 using AffineArithmetic
 using ValidatedNumerics
 

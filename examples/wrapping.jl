@@ -1,6 +1,5 @@
 # Wrapping effect example from Rump paper (2015)
 
-push!(LOAD_PATH, ".")
 using AffineArithmetic
 using ValidatedNumerics
 
