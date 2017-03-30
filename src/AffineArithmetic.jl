@@ -1,5 +1,108 @@
 module AffineArithmetic
 
-# package code goes here
+using ValidatedNumerics
 
-end # module
+import Base: +, -, *, /, ==,
+            zero, diam, range,
+            show
+
+
+export Affine, reset_affine_index
+
+
+const affine_index = [1]  # which affine vector index to use
+
+reset_affine_index() = affine_index[1] = 1
+
+doc"""
+An affine quantity for affine arithmetic.
+The usual way to create an affine quantity is from an interval `X`, via `Affine(X)`.
+"""
+immutable Affine{T<:AbstractFloat}
+    c::T   # mid-point
+    γ::Vector{T}  # error terms
+end
+
+
+function show(io::IO, C::Affine)
+    print(io, "⟨", C.c, "; ", C.γ, "⟩")
+end
+
+==(C::Affine, D::Affine) = C.c == D.c && C.γ == D.γ
+
+doc"""
+    Affine(X::Interval)
+
+Construct a new `Affine` quantity from an `Interval`.
+"""
+function Affine(X::Interval)
+    c = mid(X)
+    r = radius(X)
+
+    index = affine_index[1]
+    affine_index[1] += 1
+
+    γ = zeros(index)
+    γ[end] = r
+
+    return Affine(c, γ)
+end
+
+# conversion of numerical constant to affine:
+Affine(c::Real) = Affine(c, Float64[])
+
+
+range(C::Affine) = C.c + sum(abs.(C.γ))*(-1..1)
+
+# morally:
+# +(C::Affine, D::Afine) = Affine(C.c + D.c, C.γ + D.γ)
+
+for op in (:+, :-)
+    @eval function $op(C::Affine, D::Affine)
+        k = length(C.γ)
+        l = length(D.γ)
+
+        # account for unequal lengths:
+        m = min(k, l)
+        common_γ = $op(C.γ[1:m], D.γ[1:m])
+
+        if l >= k
+            γ = [ common_γ; D.γ[m+1:l] ]
+        else
+            γ = [ common_γ; C.γ[m+1:k] ]
+        end
+
+        Affine($op(C.c, D.c), γ)
+    end
+end
+
+function *(C::Affine, D::Affine)
+
+    c = C.c
+    d = D.c
+
+    k = length(C.γ)
+    l = length(D.γ)
+
+    # account for unequal lengths:
+    m = min(k, l)
+    common_γ = d * C.γ[1:m] + c * D.γ[1:m]
+
+    error_bound = sum(abs.(C.γ)) * sum(abs.(D.γ))
+
+    if l >= k
+        γ = [ common_γ; c*D.γ[m+1:l]; error_bound ]
+    else
+        γ = [ common_γ; d*C.γ[m+1:k]; error_bound ]
+    end
+
+    # |γ|₁ = sum(abs.(γ))
+
+    Affine(C.c * D.c, γ)
+end
+
+*(α::Real, C::Affine) = Affine(α*C.c, α*C.γ)
+
+zero(C::Affine) = Affine(0.0)
+
+end
