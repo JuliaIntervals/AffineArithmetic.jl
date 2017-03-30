@@ -4,6 +4,10 @@ using ValidatedNumerics
 X = 1..3
 X_aff = Affine(X)
 
+Affine(0.0)
+
+range(X_aff)
+
 X_aff - X_aff
 
 X_aff^2

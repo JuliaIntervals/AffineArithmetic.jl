@@ -3,7 +3,7 @@ module AffineArithmetic
 using ValidatedNumerics
 
 import Base: +, -, *, /, ==,
-            zero, range,
+            zero, one, range,
             show
 
 
