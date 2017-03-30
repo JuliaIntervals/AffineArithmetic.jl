@@ -15,7 +15,7 @@ using Base.Test
     @test C.γ == [3.0, 4.0]
 end
 
-reset_aine_index()
+reset_affine_index()
 
 @testset "Construction from intervals" begin
 
