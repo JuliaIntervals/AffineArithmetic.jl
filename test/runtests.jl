@@ -1,7 +1,7 @@
 using AffineArithmetic
 using ValidatedNumerics
 
-using Base.Test
+using Test
 
 @testset "Constructor" begin
     C = Affine(0.0)
@@ -31,36 +31,36 @@ reset_affine_index()
     @test X_a * Y_a == Affine(6.0, [3.0, 2.0, 1.0])
 end
 
+sqr(x) = x * x
 
 X = 1..3
     X_a = Affine(X)
 
-    Y = X_a^2 - 2X_a + one(X_a)
+    Y = sqr(X_a) - 2X_a + one(X_a)
     r1 = range(Y)
 
-    Z = (X_a - one(X_a))^2
+    Z = sqr(X_a - one(X_a))
     range(Z)
 
-    Y3 = (X - 1)^2
+    Y3 = sqr(X - 1)
 
 @testset "range" begin
     X = 1..3
     X_a = Affine(X)
 
-    Y1 = X_a^2 - 2X_a + one(X_a)
+    Y1 = sqr(X_a) - 2X_a + one(X_a)
     r1 = range(Y)
 
-    Y2 = (X_a - one(X_a))^2
+    Y2 = sqr(X_a - one(X_a))
     r2 = range(Z)
 
     @test r1 == (-2..4)
     @test r2 == r1
 
-    Y3 = (X - 1)^2
+    Y3 = sqr(X - 1)
     @test Y3 == 0..4
 
     @test Y3 ⊆ range(Y1)
-
 end
 
 reset_affine_index()
