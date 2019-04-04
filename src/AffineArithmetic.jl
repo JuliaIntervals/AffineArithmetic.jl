@@ -14,11 +14,11 @@ const affine_index = [1]  # which affine vector index to use
 
 reset_affine_index() = affine_index[1] = 1
 
-doc"""
+@doc """
 An affine quantity for affine arithmetic.
 The usual way to create an affine quantity is from an interval `X`, via `Affine(X)`.
 """
-immutable Affine{T<:AbstractFloat}
+struct Affine{T<:AbstractFloat}
     c::T   # mid-point
     γ::Vector{T}  # error terms
 end
@@ -30,7 +30,7 @@ end
 
 ==(C::Affine, D::Affine) = C.c == D.c && C.γ == D.γ
 
-doc"""
+@doc """
     Affine(X::Interval)
 
 Construct a new `Affine` quantity from an `Interval`.
@@ -103,13 +103,12 @@ end
 
 *(α::Real, C::Affine) = Affine(α*C.c, α*C.γ)
 
-eltype{T}(C::Affine{T}) = T
-zero{T}(C::Affine{T}) = Affine(zero(T))
-zero{T}(::Type{Affine{T}}) = Affine(zero(T))
+eltype(C::Affine{T}) where T = T
+zero(C::Affine{T}) where T = Affine(zero(T))
+zero(::Type{Affine{T}}) where T = Affine(zero(T))
 
-one{T}(C::Affine{T}) = Affine(one(T))
-one{T}(::Type{Affine{T}}) = Affine(one(T))
-
+one(C::Affine{T}) where T = Affine(one(T))
+one(::Type{Affine{T}}) where T = Affine(one(T))
 
 #one(C::Affine)
 

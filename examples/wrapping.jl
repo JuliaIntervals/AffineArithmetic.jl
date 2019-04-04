@@ -2,6 +2,7 @@
 
 using AffineArithmetic
 using ValidatedNumerics
+using LinearAlgebra
 
 A = 0.5 * [1 2; -1 1]
 eigvals(A)
