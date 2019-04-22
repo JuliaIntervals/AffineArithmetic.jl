@@ -1,5 +1,7 @@
 name = "AffineArithmetic"
 uuid = "2e89c364-fad6-56cb-99bd-ebadcd2cf8d2"
+authors = ["dpsanders"]
+version = "0.1.0"
 
 [deps]
 IntervalArithmetic = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
