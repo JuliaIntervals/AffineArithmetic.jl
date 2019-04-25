@@ -2,7 +2,7 @@ module AffineArithmetic
 
 using IntervalArithmetic
 
-import Base: +, -, *, /, ==,
+import Base: +, -, *, /, ^, ==,
             zero, one, range,
             show
 
@@ -102,6 +102,11 @@ function *(C::Affine, D::Affine)
 end
 
 *(α::Real, C::Affine) = Affine(α*C.c, α*C.γ)
+*(C::Affine, α::Real) = α * C
+
+^(x::Affine, n::Integer) = Base.power_by_squaring(x, n)
+
+Base.literal_pow(::typeof(^), x::Affine{T}, ::Val{p}) where {T,p} = x^p
 
 eltype(C::Affine{T}) where T = T
 zero(C::Affine{T}) where T = Affine(zero(T))
