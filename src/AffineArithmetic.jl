@@ -54,6 +54,8 @@ Affine(c::Real) = Affine(c, Float64[])
 
 range(C::Affine) = C.c + sum(abs.(C.γ))*(-1..1)
 
+range(X::Interval) = X
+
 # morally:
 # +(C::Affine, D::Afine) = Affine(C.c + D.c, C.γ + D.γ)
 
@@ -75,6 +77,12 @@ for op in (:+, :-)
         Affine($op(C.c, D.c), γ)
     end
 end
+
++(C::Affine, α::Real) = Affine(C.c + α, C.γ)
++(α::Real, C::Affine) = C + α
+
+-(C::Affine, α::Real) = Affine(C.c - α, C.γ)
+-(α::Real, C::Affine) = Affine(α - C.c, [-x for x in C.γ])
 
 function *(C::Affine, D::Affine)
 

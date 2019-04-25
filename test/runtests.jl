@@ -1,5 +1,6 @@
 using AffineArithmetic
 using IntervalArithmetic
+using Polynomials
 
 using Test
 
@@ -75,4 +76,19 @@ reset_affine_index()
     @test XX == [Affine(0.0, [1.0]), Affine(0.0, [0.0, 1.0])]
 
     @test A * XX == [Affine(0.0, [0.5, 1.0]), Affine(0.0, [-0.5, 0.5])]
+end
+
+
+reset_affine_index()
+
+@testset "Range of polynomial" begin
+    # example from Rump 2015
+    p = Poly([-3, 1])   # x - 3
+    p2 = p^8
+
+    x = 4 ± 1e-4
+    y = Affine(x)
+
+    @test (-70..70) ⊆ range(p2(x))
+    @test range(p2(y)) ⊆ 0.998..1.002
 end
