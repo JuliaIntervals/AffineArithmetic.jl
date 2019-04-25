@@ -14,6 +14,8 @@ using Test
     C = Affine(1.0, [3.0, 4.0])
     @test C.c == 1.0
     @test C.γ == [3.0, 4.0]
+
+    reset_affine_index()
 end
 
 reset_affine_index()
