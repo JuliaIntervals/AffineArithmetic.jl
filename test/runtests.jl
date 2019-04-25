@@ -1,5 +1,6 @@
 using AffineArithmetic
 using IntervalArithmetic
+using Polynomials
 
 using Test
 
@@ -13,6 +14,8 @@ using Test
     C = Affine(1.0, [3.0, 4.0])
     @test C.c == 1.0
     @test C.γ == [3.0, 4.0]
+
+    reset_affine_index()
 end
 
 reset_affine_index()
@@ -31,36 +34,21 @@ reset_affine_index()
     @test X_a * Y_a == Affine(6.0, [3.0, 2.0, 1.0])
 end
 
-sqr(x) = x * x
+@testset "Small powers and range" begin
 
-X = 1..3
-    X_a = Affine(X)
-
-    Y = sqr(X_a) - 2X_a + one(X_a)
-    r1 = range(Y)
-
-    Z = sqr(X_a - one(X_a))
-    range(Z)
-
-    Y3 = sqr(X - 1)
-
-@testset "range" begin
     X = 1..3
-    X_a = Affine(X)
+    Y = Affine(X)
 
-    Y1 = sqr(X_a) - 2X_a + one(X_a)
-    r1 = range(Y)
+    f(x) = x^2 - x + 1
 
-    Y2 = sqr(X_a - one(X_a))
-    r2 = range(Z)
+    @test range(f(X)) == -1..9
+    @test range(f(Y)) == -1..7   # affine is a little better
 
-    @test r1 == (-2..4)
-    @test r2 == r1
 
-    Y3 = sqr(X - 1)
-    @test Y3 == 0..4
+    g(x) = (x - 1)^3
 
-    @test Y3 ⊆ range(Y1)
+    @test range(g(X)) == 0..8
+    @test range(g(Y)) == -6..8   # affine is significantly worse
 end
 
 reset_affine_index()
@@ -75,4 +63,19 @@ reset_affine_index()
     @test XX == [Affine(0.0, [1.0]), Affine(0.0, [0.0, 1.0])]
 
     @test A * XX == [Affine(0.0, [0.5, 1.0]), Affine(0.0, [-0.5, 0.5])]
+end
+
+
+reset_affine_index()
+
+@testset "Range of polynomial" begin
+    # example from Rump 2015
+    p = Poly([-3, 1])   # x - 3
+    p2 = p^8
+
+    x = 4 ± 1e-4
+    y = Affine(x)
+
+    @test (-70..70) ⊆ range(p2(x))
+    @test range(p2(y)) ⊆ 0.998..1.002   # affine is extremely much better!
 end
