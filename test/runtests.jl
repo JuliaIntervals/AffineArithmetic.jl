@@ -1,5 +1,5 @@
 using AffineArithmetic
-using ValidatedNumerics
+using IntervalArithmetic
 
 using Test
 

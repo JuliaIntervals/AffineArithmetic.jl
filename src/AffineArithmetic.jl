@@ -1,6 +1,6 @@
 module AffineArithmetic
 
-using ValidatedNumerics
+using IntervalArithmetic
 
 import Base: +, -, *, /, ==,
             zero, one, range,
