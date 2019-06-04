@@ -4,6 +4,9 @@ import IntervalArithmetic: interval
 
 import Base: +, *, ^, -
 
+"""
+Affine form with center `c`, affine components `γ` and error `Δ`.
+"""
 struct AF1{N,T<:AbstractFloat}
     c::T   # mid-point
     γ::SVector{N,T}  # affine terms
@@ -17,6 +20,9 @@ end
 
 # ==(C::Affine, D::Affine) = C.c == D.c && C.γ == D.γ
 
+"""
+Make an `AF1` based on an interval, which is number `i` of `n` total variables.
+"""
 function AF1(X::Interval{T}, n, i) where {T}
     c = mid(X)
     r = radius(X)
@@ -124,7 +130,7 @@ interval(f(x))
 interval(10*x - x^2)
 
 
-Base.inv(x::AF1)
+function Base.inv(x::AF1)
 
     range = interval(x)
     a, b = range.lo, range.hi

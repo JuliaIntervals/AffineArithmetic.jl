@@ -9,6 +9,8 @@ import Base: +, -, *, /, ^, ==,
 
 export Affine, reset_affine_index
 
+include("AF1.jl")
+export AF1
 
 const affine_index = [1]  # which affine vector index to use
 
