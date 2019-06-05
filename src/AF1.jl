@@ -10,7 +10,7 @@ Affine form with center `c`, affine components `γ` and error `Δ`.
 struct AF1{N,T<:AbstractFloat}
     c::T   # mid-point
     γ::SVector{N,T}  # affine terms
-    Δ::T   # error term
+    Δ::T   # error term.  Error is Δ.(-1..1)
 end
 
 

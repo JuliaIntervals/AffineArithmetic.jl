@@ -84,78 +84,105 @@ y = AF{2,Float64}(0.0, SVector(0.0, 1.0), 0..0)
 
 x = AF(3..5, 2, 1)
 y = AF(2..4, 2, 2)
+#
+# 3-x
+# interval(3-x)
+#
+# x + y
+#
+#
+# interval(x+y)
+#
+# x * y
+# interval(x * y)
+#
+# interval(x * y)
+# interval(x) * interval(y)
+#
+# z = AF(-1..1, 1, 1)
+# z^2
+# interval(z^2)
+#
+# using Polynomials
+#
+# p = Poly([-3, 1])
+# p2 = p^8
+#
+# x = 4 ± 1e-4
+# y = AF(x, 1, 1)
+#
+# interval(y)
+# interval(p2(x))
+# interval(p2(y))
+#
+# @time interval(p2(y))
+#
+#
+# f( (x, y) ) = [x^3 + y, (x - y)^2]
+#
+# X = IntervalBox(-1..1, -1..1)
+#
+# f(X)
+#
+# xx = AF(X[1], 2, 1)
+# yy = AF(X[2], 2, 2)
+#
+# interval.(f((xx, yy)))
+#
+# f(X)
+#
+#
+#
+#
+# x = AF(4..6, 1, 1)    # example from Messine
+# f(x) = x * (10 - x)
+#
+# f(x)
+# interval(f(x))
+#
+# interval(10*x - x^2)
 
-3-x
-interval(3-x)
+"General formula for affine approximation of nonlinear functions"
+function affine_approx(x::AF, α, ζ, δ)
 
-x + y
+    c = α * x.c + ζ
+    γ = α .* x.γ
+    δ += α * x.Δ  # interval
 
+    return AF(c, γ, δ)
+end
 
-interval(x+y)
+function Base.sqrt(x::AF)
 
-x * y
-interval(x * y)
+    X = interval(x)
+    a, b = X.lo, X.hi
 
-interval(x * y)
-interval(x) * interval(y)
+    @show a, b
 
-z = AF(-1..1, 1, 1)
-z^2
-interval(z^2)
+    # min-range:  de Figuereido book, pg. 64
+    α = 1 / (2*√b)
+    ζ = (√b) / 2
+    δ = ( (√(b) - √(a))^2 / (2*√b) ) * (-1..1)
 
-using Polynomials
-
-p = Poly([-3, 1])
-p2 = p^8
-
-x = 4 ± 1e-4
-y = AF(x, 1, 1)
-
-interval(y)
-interval(p2(x))
-interval(p2(y))
-
-@time interval(p2(y))
-
-
-f( (x, y) ) = [x^3 + y, (x - y)^2]
-
-X = IntervalBox(-1..1, -1..1)
-
-f(X)
-
-xx = AF(X[1], 2, 1)
-yy = AF(X[2], 2, 2)
-
-interval.(f((xx, yy)))
-
-f(X)
-
-
-
-
-x = AF(4..6, 1, 1)    # example from Messine
-f(x) = x * (10 - x)
-
-f(x)
-interval(f(x))
-
-interval(10*x - x^2)
-
+    return affine_approx(x, α, ζ, δ)
+end
 
 function Base.inv(x::AF)
 
-    range = interval(x)
-    a, b = range.lo, range.hi
+    X = interval(x)
+    a, b = X.lo, X.hi
 
-    # assumes b > a > 0:
-    # min-range approx:
+    @show a, b
 
-    p = -1 / (b^2)
-    q = -p * (a + b)^2 / (2a)
-    δ = - p * (a- b)^2 / (2a)
+    # min-range:  de Figuereido book, pg. 70
+    α = -1 / (b^2)
+    d = interval(1/b - α*b, 1/a - α*a)
+    ζ = mid(d)
+    δ = radius(d) * (-1..1)
 
-    return AF(p * x.c + q, p .* x.γ, x.Δ)
+    if a < 0
+        ζ = -ζ
+    end
 
-
+    return affine_approx(x, α, ζ, δ)
 end
