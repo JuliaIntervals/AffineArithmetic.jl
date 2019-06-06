@@ -157,7 +157,7 @@ function Base.sqrt(x::AF)
     X = interval(x)
     a, b = X.lo, X.hi
 
-    @show a, b
+    # @show a, b
 
     # min-range:  de Figuereido book, pg. 64
     α = 1 / (2*√b)
@@ -172,7 +172,7 @@ function Base.inv(x::AF)
     X = interval(x)
     a, b = X.lo, X.hi
 
-    @show a, b
+    # @show a, b
 
     # min-range:  de Figuereido book, pg. 70
     α = -1 / (b^2)
