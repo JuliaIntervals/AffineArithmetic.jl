@@ -16,6 +16,8 @@ struct AFF{N,T<:AbstractFloat}
     range::Interval{T}
 end
 
+interval(x::AFF) = x.range
+
 
 function Base.show(io::IO, C::AFF{N,T}) where {N,T}
     print(io, "affine=", C.affine, "; range=", C.range)
@@ -44,7 +46,7 @@ end
 
 for op in (:sqrt, :inv)
     @eval function $op(x::AFF)
-        affine = $op(x.affine)
+        affine = $op(x.affine, x.range)
 
         range = $op(x.range)
 
@@ -56,24 +58,40 @@ end
 
 
 
-#
-#
-# *(x::AF, α::Real) = AF(α*x.c, α.*x.γ, α*x.Δ)
-# *(α::Real, x::AF) = x * α
-#
-# +(x::AF, α::Real) = AF(α+x.c, x.γ, x.Δ)
-# +(α::Real, x::AF) = x + α
-#
-# -(x::AF) = AF(-x.c, .-(x.γ), -x.Δ)
-# -(x::AF, α::Real) = AF(x.c - α, x.γ, x.Δ)
-# -(α::Real, x::AF) = α + (-x)
-#
-^(x::AFF, n::Integer) = Base.power_by_squaring(x, n)
 
+
+*(x::AFF, α::Real) = AFF(α*x.affine, α*x.range)
+*(α::Real, x::AFF) = x * α
+
++(x::AFF, α::Real) = AFF(α+x.affine, α + x.range)
++(α::Real, x::AFF) = x + α
+
+-(x::AFF) = AFF(-x.affine, -x.range)
+-(x::AFF, α::Real) = AFF(x.affine - α, x.range - α)
+-(α::Real, x::AFF) = α + (-x)
+
+function ^(x::AFF, n::Integer)
+
+    invert = false
+
+    if n < 0
+        invert = true
+        n = -n
+        # @show n
+    end
+
+    result = Base.power_by_squaring(x, n)
+
+    if invert
+        result = inv(result)
+    end
+
+    return result
+end
 Base.literal_pow(::typeof(^), x::AFF, ::Val{p}) where {T,p} = x^p
 
-x = AF{2,Float64}(0.0, SVector(1.0, 0.0), 0..0)
-y = AF{2,Float64}(0.0, SVector(0.0, 1.0), 0..0)
+# x = AF{2,Float64}(0.0, SVector(1.0, 0.0), 0..0)
+# y = AF{2,Float64}(0.0, SVector(0.0, 1.0), 0..0)
 
 #
 # x = AF(3..5, 2, 1)

@@ -74,7 +74,24 @@ end
 -(x::AF, α::Real) = AF(x.c - α, x.γ, x.Δ)
 -(α::Real, x::AF) = α + (-x)
 
-^(x::AF, n::Integer) = Base.power_by_squaring(x, n)
+function ^(x::AF, n::Integer)
+
+    invert = false
+
+    if n < 0
+        invert = true
+        n = -n
+        @show n
+    end
+
+    result = Base.power_by_squaring(x, n)
+
+    if invert
+        result = inv(result)
+    end
+
+    return result
+end
 
 Base.literal_pow(::typeof(^), x::AF, ::Val{p}) where {T,p} = x^p
 
@@ -152,9 +169,8 @@ function affine_approx(x::AF, α, ζ, δ)
     return AF(c, γ, δ)
 end
 
-function Base.sqrt(x::AF)
+function Base.sqrt(x::AF, X=interval(x))
 
-    X = interval(x)
     a, b = X.lo, X.hi
 
     # @show a, b
@@ -167,9 +183,8 @@ function Base.sqrt(x::AF)
     return affine_approx(x, α, ζ, δ)
 end
 
-function Base.inv(x::AF)
+function Base.inv(x::AF, X=interval(x))
 
-    X = interval(x)
     a, b = X.lo, X.hi
 
     # @show a, b
