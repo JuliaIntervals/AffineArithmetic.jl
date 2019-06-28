@@ -74,6 +74,8 @@ end
 -(x::AF, α::Real) = AF(x.c - α, x.γ, x.Δ)
 -(α::Real, x::AF) = α + (-x)
 
+/(x::AF, α::Real) = AF(x.c/α, x.γ/α, x.Δ/α)
+
 function ^(x::AF, n::Integer)
 
     invert = false

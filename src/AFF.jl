@@ -70,6 +70,8 @@ end
 -(x::AFF, α::Real) = AFF(x.affine - α, x.range - α)
 -(α::Real, x::AFF) = α + (-x)
 
+/(x::AFF, α::Real) = AFF(x.affine/α, x.range/α)
+
 function ^(x::AFF, n::Integer)
 
     invert = false
