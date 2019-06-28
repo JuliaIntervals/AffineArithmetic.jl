@@ -55,8 +55,8 @@ function *(x::AF{N,T}, y::AF{N,T}) where {N,T}
         Δ += sum(x.γ[i] * y.γ[j] for i in 1:N, j in 1:N if i ≠ j) * (-1..1)  # ϵ_i * ϵ_j
     end
 
-    Δ += (x.c + sum(abs.(x.γ))) * y.Δ
-    Δ += (y.c + sum(abs.(y.γ))) * x.Δ
+    Δ += (x.c + sum(abs.(x.γ))*(-1..1)) * y.Δ
+    Δ += (y.c + sum(abs.(y.γ))*(-1..1)) * x.Δ
 
     Δ += x.Δ * y.Δ
 
