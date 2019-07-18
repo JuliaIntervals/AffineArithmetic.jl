@@ -32,6 +32,10 @@ function Affine(X::Interval{T}, n, i) where {T}
     return Affine(Aff(X, n, i), X)
 end
 
+Affine(X::Interval) = Affine(X, 1, 1)
+
+Affine(Xs::Interval...) = Affine.(Xs, length(Xs), 1:length(Xs))
+
 for op in (:+, :*, :-)
     @eval function $op(x::Affine, y::Affine)
         affine = $op(x.affine, y.affine)
