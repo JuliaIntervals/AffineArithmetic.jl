@@ -12,7 +12,7 @@ include("affine.jl")
 include("full_affine.jl")
 
 
-export Affine
+export Affine, affine
 export FullAffine, reset_affine_index
 
 end
