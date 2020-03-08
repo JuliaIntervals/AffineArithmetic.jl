@@ -17,7 +17,14 @@ struct Affine{N,T<:AbstractFloat}
 end
 
 interval(x::Affine) = x.range
+range(x::Affine) = x.range
 
+eltype(::Affine{N, T}) where {N, T} = T
+zero(::Affine{N, T}) where {N, T} = Affine(Interval(zero(T)))
+zero(::Type{Affine{T}}) where {N, T} = Affine(Interval(zero(T)))
+
+one(::Affine{T}) where T = Affine(Interval(one(T)))
+one(::Type{Affine{T}}) where T = Affine(Interval(one(T)))
 
 function Base.show(io::IO, C::Affine{N,T}) where {N,T}
     print(io, "affine=", C.affine, "; range=", C.range)
@@ -33,6 +40,7 @@ function Affine(X::Interval{T}, n, i) where {T}
 end
 
 Affine(X::Interval) = Affine(X, 1, 1)
+Affine(X::Number) = Affine(Interval(X), 1, 1)
 
 affine(Xs::Interval...) = Affine.(Xs, length(Xs), 1:length(Xs))
 
@@ -59,10 +67,6 @@ for op in (:sqrt, :inv)
         return Affine(affine, range)
     end
 end
-
-
-
-
 
 *(x::Affine, α::Real) = Affine(α*x.affine, α*x.range)
 *(α::Real, x::Affine) = x * α
