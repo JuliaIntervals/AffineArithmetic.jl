@@ -11,40 +11,40 @@ Affine form with center `c`, affine components `γ` and error `Δ`.
 
 Variant where Δ is an interval
 """
-struct AF{N,T<:AbstractFloat}
+struct Aff{N,T<:AbstractFloat}
     c::T   # mid-point
     γ::SVector{N,T}  # affine terms
     Δ::Interval{T}   # error term
 end
 
 
-function Base.show(io::IO, C::AF{N,T}) where {N,T}
+function Base.show(io::IO, C::Aff{N,T}) where {N,T}
     print(io, "⟨", C.c, "; ", C.γ, "; ", C.Δ, "⟩")
 end
 
 # ==(C::Affine, D::Affine) = C.c == D.c && C.γ == D.γ
 
 """
-Make an `AF` based on an interval, which is number `i` of `n` total variables.
+Make an `Aff` based on an interval, which is number `i` of `n` total variables.
 """
-function AF(X::Interval{T}, n, i) where {T}
+function Aff(X::Interval{T}, n, i) where {T}
     c = mid(X)
     r = radius(X)
 
     γ = SVector(ntuple(j->i==j ? r : zero(r), n))
 
-    return AF(c, γ, Interval{T}(0))
+    return Aff(c, γ, Interval{T}(0))
 end
 
-+(x::AF{N,T}, y::AF{N,T}) where {N,T} = AF(x.c + y.c, x.γ .+ y.γ, x.Δ + y.Δ)
++(x::Aff{N,T}, y::Aff{N,T}) where {N,T} = Aff(x.c + y.c, x.γ .+ y.γ, x.Δ + y.Δ)
 
--(x::AF{N,T}, y::AF{N,T}) where {N,T} = AF(x.c - y.c, x.γ .- y.γ, x.Δ - y.Δ)
-
-
-interval(C::AF) = C.c + sum(abs.(C.γ))*(-1..1) + C.Δ
+-(x::Aff{N,T}, y::Aff{N,T}) where {N,T} = Aff(x.c - y.c, x.γ .- y.γ, x.Δ - y.Δ)
 
 
-function *(x::AF{N,T}, y::AF{N,T}) where {N,T}
+interval(C::Aff) = C.c + sum(abs.(C.γ))*(-1..1) + C.Δ
+
+
+function *(x::Aff{N,T}, y::Aff{N,T}) where {N,T}
     c = x.c * y.c
 
     γ = x.c .* y.γ + y.c .* x.γ
@@ -60,23 +60,23 @@ function *(x::AF{N,T}, y::AF{N,T}) where {N,T}
 
     Δ += x.Δ * y.Δ
 
-    return AF(c, γ, Δ)
+    return Aff(c, γ, Δ)
 
 end
 
-*(x::AF, α::Real) = AF(α*x.c, α.*x.γ, α*x.Δ)
-*(α::Real, x::AF) = x * α
+*(x::Aff, α::Real) = Aff(α*x.c, α.*x.γ, α*x.Δ)
+*(α::Real, x::Aff) = x * α
 
-+(x::AF, α::Real) = AF(α+x.c, x.γ, x.Δ)
-+(α::Real, x::AF) = x + α
++(x::Aff, α::Real) = Aff(α+x.c, x.γ, x.Δ)
++(α::Real, x::Aff) = x + α
 
--(x::AF) = AF(-x.c, .-(x.γ), -x.Δ)
--(x::AF, α::Real) = AF(x.c - α, x.γ, x.Δ)
--(α::Real, x::AF) = α + (-x)
+-(x::Aff) = Aff(-x.c, .-(x.γ), -x.Δ)
+-(x::Aff, α::Real) = Aff(x.c - α, x.γ, x.Δ)
+-(α::Real, x::Aff) = α + (-x)
 
-/(x::AF, α::Real) = AF(x.c/α, x.γ/α, x.Δ/α)
+/(x::Aff, α::Real) = Aff(x.c/α, x.γ/α, x.Δ/α)
 
-function ^(x::AF, n::Integer)
+function ^(x::Aff, n::Integer)
 
     invert = false
 
@@ -95,14 +95,14 @@ function ^(x::AF, n::Integer)
     return result
 end
 
-Base.literal_pow(::typeof(^), x::AF, ::Val{p}) where {T,p} = x^p
+Base.literal_pow(::typeof(^), x::Aff, ::Val{p}) where {T,p} = x^p
 
-x = AF{2,Float64}(0.0, SVector(1.0, 0.0), 0..0)
-y = AF{2,Float64}(0.0, SVector(0.0, 1.0), 0..0)
+x = Aff{2,Float64}(0.0, SVector(1.0, 0.0), 0..0)
+y = Aff{2,Float64}(0.0, SVector(0.0, 1.0), 0..0)
 
 
-x = AF(3..5, 2, 1)
-y = AF(2..4, 2, 2)
+x = Aff(3..5, 2, 1)
+y = Aff(2..4, 2, 2)
 #
 # 3-x
 # interval(3-x)
@@ -118,7 +118,7 @@ y = AF(2..4, 2, 2)
 # interval(x * y)
 # interval(x) * interval(y)
 #
-# z = AF(-1..1, 1, 1)
+# z = Aff(-1..1, 1, 1)
 # z^2
 # interval(z^2)
 #
@@ -128,7 +128,7 @@ y = AF(2..4, 2, 2)
 # p2 = p^8
 #
 # x = 4 ± 1e-4
-# y = AF(x, 1, 1)
+# y = Aff(x, 1, 1)
 #
 # interval(y)
 # interval(p2(x))
@@ -143,8 +143,8 @@ y = AF(2..4, 2, 2)
 #
 # f(X)
 #
-# xx = AF(X[1], 2, 1)
-# yy = AF(X[2], 2, 2)
+# xx = Aff(X[1], 2, 1)
+# yy = Aff(X[2], 2, 2)
 #
 # interval.(f((xx, yy)))
 #
@@ -153,7 +153,7 @@ y = AF(2..4, 2, 2)
 #
 #
 #
-# x = AF(4..6, 1, 1)    # example from Messine
+# x = Aff(4..6, 1, 1)    # example from Messine
 # f(x) = x * (10 - x)
 #
 # f(x)
@@ -162,16 +162,16 @@ y = AF(2..4, 2, 2)
 # interval(10*x - x^2)
 
 "General formula for affine approximation of nonlinear functions"
-function affine_approx(x::AF, α, ζ, δ)
+function affine_approx(x::Aff, α, ζ, δ)
 
     c = α * x.c + ζ
     γ = α .* x.γ
     δ += α * x.Δ  # interval
 
-    return AF(c, γ, δ)
+    return Aff(c, γ, δ)
 end
 
-function Base.sqrt(x::AF, X=interval(x))
+function Base.sqrt(x::Aff, X=interval(x))
 
     a, b = X.lo, X.hi
 
@@ -185,7 +185,7 @@ function Base.sqrt(x::AF, X=interval(x))
     return affine_approx(x, α, ζ, δ)
 end
 
-function Base.inv(x::AF, X=interval(x))
+function Base.inv(x::Aff, X=interval(x))
 
     a, b = X.lo, X.hi
 
