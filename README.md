@@ -7,7 +7,7 @@
 [![codecov.io](http://codecov.io/github/dpsanders/AffineArithmetic.jl/coverage.svg?branch=master)](http://codecov.io/github/dpsanders/AffineArithmetic.jl?branch=master)
 
 A pure-Julia implementation of affine arithmetic.
-This is a method for bounding the results of evaluating functions with linear combination of sets. A further goal in progress is to provide a rigorous implementation extending standard interval arithmetic provided in the author's [`ValidatedNumerics.jl` package](https://github.com/dpsanders/ValidatedNumerics.jl). 
+This is a method for bounding the results of evaluating functions with linear combination of sets. A future goal is to provide a rigorous implementation, extending standard interval arithmetic provided in the author's [`ValidatedNumerics.jl` package](https://github.com/dpsanders/ValidatedNumerics.jl). 
 
 
 ## Author
