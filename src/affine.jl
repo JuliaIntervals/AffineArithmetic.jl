@@ -56,7 +56,7 @@ for op in (:+, :*, :-)
     end
 end
 
-for op in (:sqrt, :inv)
+for op in (:sqrt, :inv, :exp)
     @eval function $op(x::Affine)
         affine = $op(x.affine, x.range)
 
