@@ -229,9 +229,8 @@ function Base.exp(x::Aff, X=interval(x))
 
     d = interval(d_min, d_max)
 
-
     ζ = mid(d)
-    δ = radius(d)
+    δ = radius(d) * (-1..1)
 
     return affine_approx(x, α, ζ, δ)
 end
