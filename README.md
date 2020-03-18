@@ -28,4 +28,4 @@ Jorge Stolfi, Luiz Henrique De Figueiredo
 
 ## Acknowledgements
 
-Financial support is acknowledged from DGAPA-UNAM PAPIIT grants IN-117214 and IN-117117.
+DPS acknowledges financial support from DGAPA-UNAM PAPIIT grants IN-117214 and IN-117117, and a *Cátedra Marcos Moshinsky* (2018).
