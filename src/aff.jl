@@ -22,7 +22,7 @@ function Base.show(io::IO, C::Aff{N,T}) where {N,T}
     print(io, "⟨", C.c, "; ", C.γ, "; ", C.Δ, "⟩")
 end
 
-# ==(C::Affine, D::Affine) = C.c == D.c && C.γ == D.γ
+==(C::Aff, D::Aff) = C.c == D.c && C.γ == D.γ && C.Δ == D.Δ
 
 """
 Make an `Aff` based on an interval, which is number `i` of `n` total variables.
