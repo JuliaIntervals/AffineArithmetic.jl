@@ -58,7 +58,7 @@ reset_affine_index()
 
 @testset "Range of polynomial" begin
     # example from Rump 2015
-    p = Poly([-3, 1])   # x - 3
+    p = Polynomial([-3, 1])   # x - 3
     p2 = p^8
 
     x = 4 ± 1e-4
