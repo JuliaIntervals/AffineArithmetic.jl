@@ -11,10 +11,10 @@ Affine form with center `c`, affine components `γ` and error `Δ`.
 
 Variant where Δ is an interval
 """
-struct Aff{N,T<:AbstractFloat}
+struct Aff{N,T<:Interval}
     c::T   # mid-point
     γ::SVector{N,T}  # affine terms
-    Δ::Interval{T}   # error term
+    Δ::T   # error term
 end
 
 
@@ -27,11 +27,11 @@ end
 """
 Make an `Aff` based on an interval, which is number `i` of `n` total variables.
 """
-function Aff(X::Interval{T}, n, i) where {T}
-    c = mid(X)
-    r = radius(X)
+function Aff(X::Interval{T}, n::Int, i) where {T}
+    c = interval(mid(X))
+    r = interval(radius(X))
 
-    γ = SVector(ntuple(j->i==j ? r : zero(r), n))
+    γ = SVector(ntuple(j -> i==j ? r : zero(r), n))
 
     return Aff(c, γ, Interval{T}(0))
 end
@@ -96,70 +96,6 @@ function ^(x::Aff, n::Integer)
 end
 
 Base.literal_pow(::typeof(^), x::Aff, ::Val{p}) where {T,p} = x^p
-
-x = Aff{2,Float64}(0.0, SVector(1.0, 0.0), 0..0)
-y = Aff{2,Float64}(0.0, SVector(0.0, 1.0), 0..0)
-
-
-x = Aff(3..5, 2, 1)
-y = Aff(2..4, 2, 2)
-#
-# 3-x
-# interval(3-x)
-#
-# x + y
-#
-#
-# interval(x+y)
-#
-# x * y
-# interval(x * y)
-#
-# interval(x * y)
-# interval(x) * interval(y)
-#
-# z = Aff(-1..1, 1, 1)
-# z^2
-# interval(z^2)
-#
-# using Polynomials
-#
-# p = Poly([-3, 1])
-# p2 = p^8
-#
-# x = 4 ± 1e-4
-# y = Aff(x, 1, 1)
-#
-# interval(y)
-# interval(p2(x))
-# interval(p2(y))
-#
-# @time interval(p2(y))
-#
-#
-# f( (x, y) ) = [x^3 + y, (x - y)^2]
-#
-# X = IntervalBox(-1..1, -1..1)
-#
-# f(X)
-#
-# xx = Aff(X[1], 2, 1)
-# yy = Aff(X[2], 2, 2)
-#
-# interval.(f((xx, yy)))
-#
-# f(X)
-#
-#
-#
-#
-# x = Aff(4..6, 1, 1)    # example from Messine
-# f(x) = x * (10 - x)
-#
-# f(x)
-# interval(f(x))
-#
-# interval(10*x - x^2)
 
 "General formula for affine approximation of nonlinear functions"
 function affine_approx(x::Aff, α, ζ, δ)

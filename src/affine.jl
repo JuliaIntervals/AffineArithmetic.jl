@@ -11,9 +11,9 @@ Affine form with center `c`, affine components `γ` and error `Δ`.
 
 Variant where Δ is an interval
 """
-struct Affine{N,T<:AbstractFloat}
+struct Affine{N,T<:Interval}
     affine::Aff{N,T}
-    range::Interval{T}
+    range::T
 end
 
 interval(x::Affine) = x.range
