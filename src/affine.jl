@@ -21,7 +21,7 @@ range(x::Affine) = x.range
 
 eltype(::Affine{N, T}) where {N, T} = T
 zero(::Affine{N, T}) where {N, T} = Affine(Interval(zero(T)))
-zero(::Type{Affine{T}}) where {N, T} = Affine(Interval(zero(T)))
+zero(::Type{Affine{T}}) where {T} = Affine(Interval(zero(T)))
 
 one(::Affine{T}) where T = Affine(Interval(one(T)))
 one(::Type{Affine{T}}) where T = Affine(Interval(one(T)))
@@ -98,4 +98,4 @@ function ^(x::Affine, n::Integer)
 
     return result
 end
-Base.literal_pow(::typeof(^), x::Affine, ::Val{p}) where {T,p} = x^p
+Base.literal_pow(::typeof(^), x::Affine, ::Val{p}) where {p} = x^p
