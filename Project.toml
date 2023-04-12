@@ -10,7 +10,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 IntervalArithmetic = "0.16, 0.17, 0.18, 0.19, 0.20"
-Polynomials = "0.6, 1, 2"
+Polynomials = "0.6, 1, 2, 3"
 StaticArrays = "0.12, 1"
 julia = "1"
 
