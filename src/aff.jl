@@ -95,7 +95,7 @@ function ^(x::Aff, n::Integer)
     return result
 end
 
-Base.literal_pow(::typeof(^), x::Aff, ::Val{p}) where {T,p} = x^p
+Base.literal_pow(::typeof(^), x::Aff, ::Val{p}) where {p} = x^p
 
 x = Aff{2,Float64}(0.0, SVector(1.0, 0.0), 0..0)
 y = Aff{2,Float64}(0.0, SVector(0.0, 1.0), 0..0)
