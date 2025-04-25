@@ -20,11 +20,12 @@ interval(x::Affine) = x.range
 range(x::Affine) = x.range
 
 eltype(::Affine{N, T}) where {N, T} = T
-zero(::Affine{N, T}) where {N, T} = Affine(zero(Interval{T}))
-zero(::Type{Affine{T}}) where {T} = Affine(zero(Interval{T}))
 
-one(::Affine{T}) where T = Affine(one(Interval{T}))
-one(::Type{Affine{T}}) where T = Affine(one(Interval{T}))
+zero(::Affine{N, T}) where {N, T} = Affine(zero(Interval{T}))
+zero(::Type{Affine{N, T}}) where {N, T} = Affine(zero(Interval{T}))
+
+one(::Affine{N, T}) where {N, T} = Affine(one(Interval{T}))
+one(::Type{Affine{N, T}}) where {N, T} = Affine(one(Interval{T}))
 
 function Base.show(io::IO, C::Affine{N,T}) where {N,T}
     print(io, "affine=", C.affine, "; range=", C.range)
