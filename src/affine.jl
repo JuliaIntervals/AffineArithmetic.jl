@@ -20,11 +20,11 @@ interval(x::Affine) = x.range
 range(x::Affine) = x.range
 
 eltype(::Affine{N, T}) where {N, T} = T
-zero(::Affine{N, T}) where {N, T} = Affine(Interval(zero(T)))
-zero(::Type{Affine{T}}) where {T} = Affine(Interval(zero(T)))
+zero(::Affine{N, T}) where {N, T} = Affine(zero(Interval{T}))
+zero(::Type{Affine{T}}) where {T} = Affine(zero(Interval{T}))
 
-one(::Affine{T}) where T = Affine(Interval(one(T)))
-one(::Type{Affine{T}}) where T = Affine(Interval(one(T)))
+one(::Affine{T}) where T = Affine(one(Interval{T}))
+one(::Type{Affine{T}}) where T = Affine(one(Interval{T}))
 
 function Base.show(io::IO, C::Affine{N,T}) where {N,T}
     print(io, "affine=", C.affine, "; range=", C.range)
@@ -40,7 +40,7 @@ function Affine(X::Interval{T}, n, i) where {T}
 end
 
 Affine(X::Interval) = Affine(X, 1, 1)
-Affine(X::Number) = Affine(Interval(X), 1, 1)
+Affine(X::Number) = Affine(interval(X), 1, 1)
 
 affine(Xs::Interval...) = Affine.(Xs, length(Xs), 1:length(Xs))
 
@@ -50,7 +50,7 @@ for op in (:+, :*, :-)
 
         range = $op(x.range, y.range)
 
-        range = range ∩ interval(affine)
+        range = intersect_interval(range, interval(affine))
 
         return Affine(affine, range)
     end
@@ -62,7 +62,7 @@ for op in (:sqrt, :inv)
 
         range = $op(x.range)
 
-        range = range ∩ interval(affine)
+        range = intersect_interval(range, interval(affine))
 
         return Affine(affine, range)
     end
