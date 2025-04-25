@@ -31,7 +31,7 @@ function Base.show(io::IO, C::Affine{N,T}) where {N,T}
     print(io, "affine=", C.affine, "; range=", C.range)
 end
 
-==(C::Affine, D::Affine) = C.affine == D.affine && C.range == D.range
+==(C::Affine, D::Affine) = C.affine == D.affine && isequal_interval(C.range, D.range)
 
 """
 Make an `Affine` based on an interval, which is number `i` of `n` total variables.
