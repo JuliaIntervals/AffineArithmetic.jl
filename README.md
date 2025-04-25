@@ -1,4 +1,4 @@
-# `AffineArithmetic.jl`
+# AffineArithmetic
 
 [![Build Status](https://github.com/juliaintervals/AffineArithmetic.jl/workflows/CI/badge.svg)](https://github.com/juliaintervals/AffineArithmetic.jl/actions)
 
