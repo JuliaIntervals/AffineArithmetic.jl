@@ -1,4 +1,3 @@
-
 const affine_index = [1]  # which affine vector index to use
 
 reset_affine_index() = affine_index[1] = 1
@@ -40,7 +39,7 @@ end
 # conversion of numerical constant to affine:
 FullAffine(c::Real) = FullAffine(c, Float64[])
 
-range(C::FullAffine) = C.c + sum(abs.(C.γ))*(-1..1)
+range(C::FullAffine) = C.c + sum(abs.(C.γ))*interval(-1, 1)
 range(X::Interval) = X
 
 # morally:
