@@ -51,7 +51,7 @@ reset_affine_index()
                  Affine(Aff(0.0, SVector{1, Float64}(1.0), interval(0)), interval(-1, 1))]
 
     @test A * XX == [Affine(Aff(0.0, SVector{1, Float64}(1.5), interval(0)), interval(-1.5, 1.5)),
-                     Affine(Aff(0.0, SVector{1, Float64}(0.0), interval(0)), interval(0))]))
+                     Affine(Aff(0.0, SVector{1, Float64}(0.0), interval(0)), interval(0))]
 end
 
 reset_affine_index()
