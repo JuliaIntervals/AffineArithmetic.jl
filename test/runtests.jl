@@ -47,11 +47,11 @@ reset_affine_index()
     Y = Affine(interval(-1, 1))
 
     XX = [X, Y]
-    @test all(isequal_interval.(XX, [Affine(Aff(0.0, SVector{1, Float64}(1.0), interval(0)), interval(-1, 1)),
-                                     Affine(Aff(0.0, SVector{1, Float64}(1.0), interval(0)), interval(-1, 1))]))
+    @test XX == [Affine(Aff(0.0, SVector{1, Float64}(1.0), interval(0)), interval(-1, 1)),
+                 Affine(Aff(0.0, SVector{1, Float64}(1.0), interval(0)), interval(-1, 1))]
 
-    @test all(isequal_interval.(A * XX, [Affine(Aff(0.0, SVector{1, Float64}(1.5), interval(0)), interval(-1.5, 1.5)),
-                                         Affine(Aff(0.0, SVector{1, Float64}(0.0), interval(0)), interval(0))]))
+    @test A * XX == [Affine(Aff(0.0, SVector{1, Float64}(1.5), interval(0)), interval(-1.5, 1.5)),
+                     Affine(Aff(0.0, SVector{1, Float64}(0.0), interval(0)), interval(0))]))
 end
 
 reset_affine_index()
