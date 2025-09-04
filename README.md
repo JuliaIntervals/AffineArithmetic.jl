@@ -1,18 +1,9 @@
 # AffineArithmetic
 
-[![Build Status](https://github.com/juliaintervals/AffineArithmetic.jl/workflows/CI/badge.svg)](https://github.com/juliaintervals/AffineArithmetic.jl/actions)
+This package is an attempt at implementing affine arithmetic in Julia. Unfortunately the main maintainers of JuliaIntervals have been lacking the manpower to pursue its development. Any contribution is welcome!
 
-[![codecov.io](http://codecov.io/github/dpsanders/AffineArithmetic.jl/coverage.svg?branch=master)](http://codecov.io/github/dpsanders/AffineArithmetic.jl?branch=master)
-
-A pure-Julia implementation of affine arithmetic.
-This is a method for bounding the results of evaluating functions with linear combination of sets. A future goal is to provide a rigorous implementation, extending standard interval arithmetic provided in the author's [`ValidatedNumerics.jl` package](https://github.com/dpsanders/ValidatedNumerics.jl). 
-
-
-## Author
-
-- [David P. Sanders](http://sistemas.fciencias.unam.mx/~dsanders),
-Departamento de Física, Facultad de Ciencias, Universidad Nacional Autónoma de México (UNAM)
-
+> [!CAUTION]
+> **In its current state, this package does not guarantee any rigorous computations!**
 
 ## References
 
@@ -23,7 +14,3 @@ Siegfried M. Rump and Masahide Kashiwagi
 
 - [Self-Validated Numerical Methods and Applications](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.36.8089) (1997),
 Jorge Stolfi, Luiz Henrique De Figueiredo
-
-## Acknowledgements
-
-DPS acknowledges financial support from DGAPA-UNAM PAPIIT grants IN-117214 and IN-117117, and a *Cátedra Marcos Moshinsky* (2018).
