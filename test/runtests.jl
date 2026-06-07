@@ -22,9 +22,16 @@ using AffineArithmetic: Aff
     @test prod_a.affine == Aff(6.0, SVector{1, Float64}(5.0), interval(0, 1))
 end
 
+@testset "Construction from numbers" begin
+    @test Affine(1.5) == Affine(interval(1.5))
+end
+
 @testset "Basic functionality" begin
     X = Affine(interval(1, 3))
     @test eltype(X) == Float64
+    T = typeof(X)
+    @test zero(T) == Affine(interval(0))
+    @test one(T) == Affine(interval(1))
 end
 
 @testset "Small powers and range" begin
@@ -35,6 +42,11 @@ end
 
     @test isequal_interval(range(f(X)), interval(-1, 9))
     @test isequal_interval(range(f(Y)), interval(0, 7))   # affine is a little better
+
+    @test Y^2 == Affine(Aff(4.0, SVector{1}([4.0]), interval(0, 1)), interval(1, 9))
+    @test (Y.affine)^2 == Aff(4.0, SVector{1}([4.0]), interval(0, 1))
+    @test_broken !isnai(((Y.affine)^(-2)).Δ)
+    @test_broken (Y.affine)^(-1)
 
 
     g(x) = (x - 1)^3
@@ -73,11 +85,20 @@ reset_affine_index()
     @test issubset_interval(range(p2(y)), interval(0.998, 1.002))   # affine is extremely much better!
 end
 
-@testset "Constructors with intervals" begin
+@testset "Other operations" begin
     X = Affine(interval(1, 2))
     @test X isa Affine
     @test X - X == Affine(interval(0))
 
     x, y = affine(interval(1, 2), interval(3, 4))
     @test isequal_interval(interval(x + y - x - y), interval(0))
+
+    @test -X == Affine(Aff(-1.5, SVector{1}([-0.5]), interval(0)), -interval(1, 2))
+
+    A = X.affine
+    B = sqrt(A)
+    # Note: numbers may be wrong (just copied the result)
+    @test B.c ≈ 1.23743686 && B.γ ≈ SVector{1}([0.176776695]) && -inf(B.Δ) ≈ sup(B.Δ) ≈ 0.060660171
+    Y = sqrt(X)
+    @test Y.affine == B && inf(Y.range) == 1 && sup(Y.range) == sqrt(2)
 end
