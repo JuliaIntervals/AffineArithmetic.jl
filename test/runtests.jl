@@ -22,6 +22,11 @@ using AffineArithmetic: Aff
     @test prod_a.affine == Aff(6.0, SVector{1, Float64}(5.0), interval(0, 1))
 end
 
+@testset "Basic functionality" begin
+    X = Affine(interval(1, 3))
+    @test eltype(X) == Float64
+end
+
 @testset "Small powers and range" begin
     X = interval(1, 3)
     Y = Affine(X)

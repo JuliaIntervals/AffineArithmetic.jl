@@ -4,7 +4,7 @@ using IntervalArithmetic
 
 import Base: +, -, *, /, ^, ==,
             zero, one, range,
-            show
+            show, eltype
 
 
 include("aff.jl")
