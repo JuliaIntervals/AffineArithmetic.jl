@@ -203,3 +203,34 @@ function Base.inv(x::Aff, X=interval(x))
 
     return affine_approx(x, α, ζ, δ)
 end
+
+
+function Base.exp(x::Aff, X=interval(x))
+
+    # min-range approximation:  de Figuereido book, pg. 69
+
+    a, b = X.lo, X.hi
+
+    # @show a, b
+
+    exp_X = exp(X)
+    exp_a, exp_b = exp_X.lo, exp_X.hi
+
+    α = exp_a
+
+    if α == 0
+        d_min = zero(x.lo)
+        d_max = exp_b
+
+    else
+        d_max = IntervalArithmetic.@round_up(exp_b - α*b)
+        d_min = IntervalArithmetic.@round_down(exp_a - α*a)
+    end
+
+    d = interval(d_min, d_max)
+
+    ζ = mid(d)
+    δ = radius(d) * (-1..1)
+
+    return affine_approx(x, α, ζ, δ)
+end
